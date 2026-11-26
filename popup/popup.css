@@ -1,0 +1,29 @@
+:root {
+  color-scheme: light dark;
+  --bg: #fff; --fg: #1d1b20; --muted: #6b6870; --line: #e4e0e8;
+  --accent: #833ab4; --accent2: #e1306c; --danger: #c62828; --card: #f6f2fa;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1d1b20; --fg: #ece6f0; --muted: #a39fa8; --line: #3a363f; --card: #2a2630; --accent: #c49be8; }
+}
+* { box-sizing: border-box; }
+body { width: 320px; margin: 0; padding: 12px 14px; font: 13px/1.4 system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+h1 { font-size: 15px; margin: 0; flex: 1; }
+.chip { font-size: 11px; padding: 2px 8px; border-radius: 99px; background: var(--card); color: var(--muted); }
+.chip.ok { color: #fff; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.status { background: var(--card); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; min-height: 36px; }
+.status b { display: block; }
+.status small { color: var(--muted); }
+.buttons { display: flex; gap: 8px; margin-bottom: 12px; }
+button { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font: inherit; font-weight: 600; cursor: pointer; }
+button:disabled { opacity: .45; cursor: default; }
+button.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: #fff; border: 0; }
+button.danger { background: var(--danger); color: #fff; border: 0; }
+form { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; }
+label { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+label span { display: flex; align-items: center; gap: 4px; }
+input[type=number] { width: 64px; padding: 3px 5px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); font: inherit; }
+select { padding: 3px 5px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); font: inherit; }
+small { color: var(--muted); font-size: 11px; }
+footer { margin-top: 10px; color: var(--muted); font-size: 11px; }

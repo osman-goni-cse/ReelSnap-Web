@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ReelSnap Web</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <img src="../icons/icon32.png" alt="" width="20" height="20" />
+    <h1>ReelSnap Web</h1>
+    <span id="site" class="chip">…</span>
+  </header>
+
+  <section id="status" class="status">Loading…</section>
+
+  <div class="buttons">
+    <button id="loop" class="primary">Start loop</button>
+    <button id="burst">Burst</button>
+    <button id="stop" class="danger" hidden>Stop</button>
+  </div>
+
+  <form id="settings">
+    <label>Wait before capture <span><input name="waitMs" type="number" min="0" max="60" step="0.5" data-scale="1000" /> s</span></label>
+    <label>Frames per reel <span><input name="frames" type="number" min="1" max="20" step="1" /></span></label>
+    <label>Gap between frames <span><input name="gapMs" type="number" min="0" max="60" step="0.5" data-scale="1000" /> s</span></label>
+    <label>Random jitter ±20% <span><input name="jitter" type="checkbox" /></span></label>
+    <label>Stop after reels <span><input name="maxReels" type="number" min="0" step="1" /> <small>0 = ∞</small></span></label>
+    <label>Stop after minutes <span><input name="maxMinutes" type="number" min="0" step="1" /> <small>0 = ∞</small></span></label>
+    <label>Format
+      <span>
+        <select name="format">
+          <option value="png">PNG</option>
+          <option value="jpeg">JPEG</option>
+        </select>
+      </span>
+    </label>
+  </form>
+
+  <footer>Saved to Downloads/ReelSnap/&lt;session&gt;/ · nothing leaves your computer · keep the tab visible while looping</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
