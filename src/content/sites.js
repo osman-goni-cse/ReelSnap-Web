@@ -2,8 +2,8 @@
 (() => {
   const RS = globalThis.RS;
 
-  // Generic "next" buttons: aria-labels like "Next", "Next video", "Go to next video", "Next card".
-  const GENERIC_NEXT = /^(go to )?next( (video|card|reel|short|post))?$/i;
+  // Generic "next" buttons: aria-labels like "Next", "Next video", "Go to next video", "Navigate to next Reel".
+  const GENERIC_NEXT = /^((go|navigate) to )?next( (video|card|reel|short|post))?$/i;
 
   RS.SITES = [
     {
@@ -19,7 +19,7 @@
       name: "Instagram",
       short: "ig",
       host: /(^|\.)instagram\.com$/,
-      nextSelectors: [],
+      nextSelectors: ['[aria-label="Navigate to next Reel"]'],
       order: ["scroll", "key", "button"],
     },
     {
