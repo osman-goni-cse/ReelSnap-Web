@@ -54,6 +54,24 @@
     return canvas.convertToBlob({ type: mime, quality: 0.92 });
   };
 
+  /**
+   * True when the current video frame is (near) uniformly black, e.g. right after a reel
+   * switch before the first frame is decoded. Tainted videos can't be inspected → false.
+   */
+  RS.isBlankFrame = (video) => {
+    try {
+      const c = new OffscreenCanvas(16, 16);
+      const ctx = c.getContext("2d", { willReadFrequently: true });
+      ctx.drawImage(video, 0, 0, 16, 16);
+      const d = ctx.getImageData(0, 0, 16, 16).data;
+      let max = 0;
+      for (let i = 0; i < d.length; i += 4) max = Math.max(max, d[i], d[i + 1], d[i + 2]);
+      return max < 12;
+    } catch {
+      return false;
+    }
+  };
+
   /** Returns { blob, method: "video" | "tab" }. */
   RS.captureFrame = async (video, format, signal) => {
     const mime = format === "jpeg" ? "image/jpeg" : "image/png";

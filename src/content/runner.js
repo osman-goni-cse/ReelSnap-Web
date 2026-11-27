@@ -75,7 +75,12 @@
     const ext = settings.format === "jpeg" ? "jpg" : "png";
     for (let i = 1; i <= settings.frames; i++) {
       try {
-        const video = await RS.awaitPlaying(signal);
+        let video = await RS.awaitPlaying(signal);
+        // Skip black frames shown while the next reel is still loading (up to ~1.5 s).
+        for (let k = 0; k < 5 && RS.isBlankFrame(video); k++) {
+          await RS.sleep(300, signal);
+          video = await RS.awaitPlaying(signal);
+        }
         const { blob, method } = await RS.captureFrame(video, settings.format, signal);
         const filename = `ReelSnap/${session}/${site.short}_r${RS.pad(reelNo, 4)}_s${RS.pad(i, 2)}.${ext}`;
         await RS.saveBlob(blob, filename);

@@ -11,7 +11,7 @@
       name: "TikTok",
       short: "tiktok",
       host: /(^|\.)tiktok\.com$/,
-      nextSelectors: ['[data-e2e="arrow-right"]', 'button[data-e2e="arrow-down"]'],
+      nextSelectors: ['button[data-e2e="feed-navigation-next"]'],
       order: ["key", "button", "scroll"],
     },
     {
