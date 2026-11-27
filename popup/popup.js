@@ -14,12 +14,12 @@ let tabId = null;
 let reachable = false;
 
 function renderStatus(s) {
-  const running = s && (s.state === "running" || s.state === "burst");
-  $("loop").hidden = $("burst").hidden = running;
+  const running = s && ["running", "burst", "download"].includes(s.state);
+  $("loop").hidden = $("burst").hidden = $("download").hidden = running;
   $("stop").hidden = !running;
-  $("loop").disabled = $("burst").disabled = !reachable;
+  $("loop").disabled = $("burst").disabled = $("download").disabled = !reachable;
   if (!reachable) return;
-  const title = s.state === "running" ? "Looping…" : s.state === "burst" ? "Burst…" : "Idle";
+  const title = { running: "Looping…", burst: "Burst…", download: "Downloading…" }[s.state] || "Idle";
   const counts = s.session ? `Session ${s.session}: ${s.reels} reels, ${s.frames} frames` : "Press Start loop or Burst";
   $("status").innerHTML = "";
   const b = document.createElement("b");
@@ -64,6 +64,7 @@ async function send(msg) {
 
 $("loop").onclick = async () => showResult(await send({ type: "rs:start", mode: "loop" }));
 $("burst").onclick = async () => showResult(await send({ type: "rs:start", mode: "burst" }));
+$("download").onclick = async () => showResult(await send({ type: "rs:start", mode: "download" }));
 $("stop").onclick = () => send({ type: "rs:stop" });
 
 function showResult(res) {

@@ -68,6 +68,14 @@
     return false;
   };
 
+  /** A visible modal dialog covering the middle of the screen (e.g. Instagram's logged-out login wall). */
+  const blockingDialog = () =>
+    [...document.querySelectorAll('[role="dialog"], [aria-modal="true"]')].some((d) => {
+      const r = d.getBoundingClientRect();
+      return r.width > 200 && r.height > 150 && r.left < innerWidth / 2 && r.right > innerWidth / 2 &&
+        r.top < innerHeight / 2 && r.bottom > innerHeight / 2 && getComputedStyle(d).visibility !== "hidden";
+    });
+
   // ---- capture block ----
   let consecutiveFailures = 0;
 
@@ -114,11 +122,24 @@
       await RS.awaitPlaying(signal);
       await RS.sleep(RS.jitter(settings.waitMs, settings.jitter), signal);
       await captureBlock(site, settings, session, reel, signal);
-      if (!(await nextReel(site, signal))) throw new Error("Couldn't advance to the next reel on this page");
+      if (!(await nextReel(site, signal))) {
+        throw new Error(
+          blockingDialog()
+            ? "A dialog (e.g. a login prompt) is blocking the page. Close it or log in, then start again"
+            : "Couldn't advance to the next reel on this page",
+        );
+      }
       emit({ reels: reel });
       if (settings.maxReels > 0 && reel >= settings.maxReels) return `Reel limit reached (${reel})`;
       if (settings.maxMinutes > 0 && Date.now() - startedAt >= settings.maxMinutes * 60000) return "Time limit reached";
     }
+  };
+
+  const runDownload = async (site, signal) => {
+    emit({ state: "download", session: null, reels: 0, frames: 0, message: "Recording…" });
+    return RS.downloadReel(site, signal, (t, total) =>
+      emit({ message: total ? `Recording… ${t}s / ${total}s` : `Recording… ${t}s` }),
+    );
   };
 
   const start = (mode) => {
@@ -128,7 +149,7 @@
     controller = new AbortController();
     const { signal } = controller;
     consecutiveFailures = 0;
-    (mode === "burst" ? runBurst : runLoop)(site, signal)
+    ({ burst: runBurst, download: runDownload }[mode] || runLoop)(site, signal)
       .then((msg) => emit({ state: "idle", message: msg }))
       .catch((e) => emit({ state: "idle", message: e?.name === "AbortError" ? "Stopped" : e.message }))
       .finally(() => {

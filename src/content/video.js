@@ -43,11 +43,12 @@
 
   RS.videoSignature = () => {
     const v = RS.activeVideo();
-    return { el: v, src: v?.currentSrc || "" };
+    // Facebook attaches its stream via srcObject (MediaSourceHandle) and leaves currentSrc empty.
+    return { el: v, src: v?.currentSrc || "", obj: v?.srcObject || null };
   };
 
   RS.videoChanged = (sig) => {
     const v = RS.activeVideo();
-    return !!v && (v !== sig.el || (v.currentSrc || "") !== sig.src);
+    return !!v && (v !== sig.el || (v.currentSrc || "") !== sig.src || (v.srcObject || null) !== sig.obj);
   };
 })();

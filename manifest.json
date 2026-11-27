@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "ReelSnap Web",
-  "version": "1.0.1",
-  "description": "Capture frames from TikTok, Instagram, Facebook, Snapchat Spotlight and YouTube Shorts: burst or auto-loop through reels. Offline.",
+  "version": "1.1.0",
+  "description": "Capture frames (burst or auto-loop) and download reels from TikTok, Instagram, Facebook, Snapchat Spotlight and YouTube Shorts. Offline.",
   "minimum_chrome_version": "116",
   "permissions": ["storage", "downloads", "activeTab"],
   "host_permissions": [
@@ -27,6 +27,7 @@
         "src/content/sites.js",
         "src/content/video.js",
         "src/content/capture.js",
+        "src/content/download.js",
         "src/content/runner.js"
       ],
       "run_at": "document_idle"

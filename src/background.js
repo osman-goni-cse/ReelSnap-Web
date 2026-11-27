@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       const tabId = sender.tab?.id;
       if (tabId == null) return;
       const s = msg.status;
-      const text = s.state === "running" ? String(s.reels) : s.state === "burst" ? "…" : "";
+      const text = s.state === "running" ? String(s.reels) : s.state === "burst" ? "…" : s.state === "download" ? "REC" : "";
       chrome.action.setBadgeText({ tabId, text });
       chrome.action.setBadgeBackgroundColor({ tabId, color: "#E1306C" });
       return;
